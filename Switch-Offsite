@@ -1,0 +1,203 @@
+! Cisco IOS Software, C2960 Software (C2960-LANBASEK9-M), Version 15.0(2)SE10a, RELEASE SOFTWARE (fc3)
+! 
+! Image: Software: C2960-LANBASEK9-M, 15.0(2)SE10a, RELEASE SOFTWARE (fc3)
+! Image: Compiled: Thu 03-Nov-16 14:21 by prod_rel_team
+! Image: flash:/c2960-lanbasek9-mz.150-2.SE10a.bin
+! Chassis type: WS-C2960-24TT-L
+! Memory: main 65536K
+! Processor ID: FOC1029ZBWD
+! CPU: PowerPC405
+! 
+! VTP: VTP Version capable             : 1 to 3
+! VTP: VTP version running             : 1
+! VTP: VTP Domain Name                 : 
+! VTP: VTP Pruning Mode                : Disabled
+! VTP: VTP Traps Generation            : Disabled
+! VTP: Device ID                       : 0019.0636.1c00
+! VTP: Local updater ID is 10.1.90.10 on interface Vl90 (lowest numbered VLAN interface found)
+! VTP: Feature VLAN:
+! VTP: --------------
+! VTP: VTP Operating Mode                : Server
+! VTP: Maximum VLANs supported locally   : 255
+! VTP: Number of existing VLANs          : 12
+! VTP: Configuration Revision            : 7
+! VTP: MD5 digest                        : 0xB4 0x90 0xA3 0xFA 0x4D 0x61 0x8D 0xBD 
+! VTP:                                     0x7C 0xCC 0x35 0x45 0xBE 0x2A 0x4B 0x14 
+! 
+! NAME: "1", DESCR: "WS-C2960-24TT-L"
+! PID: WS-C2960-24TT-L   , VID: V02  , SN: FOC1029ZBWD
+! 
+! 
+!
+! Last configuration change at 09:27:44 CEST Tue May 12 2026 by admin
+!
+version 15.0
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname S2-SW1
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret 5 $1$jghN$FEsFcCCet1lunEwqZn4i1/
+!
+username admin privilege 15 secret 5 $1$/Qk9$HI9PfBjd.uWA7obWRc2en/
+no aaa new-model
+clock timezone CET 1 0
+clock summer-time CEST recurring
+system mtu routing 1500
+!
+!
+no ip domain-lookup
+ip domain-name virkom.local
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+ip ssh version 2
+!
+!
+!
+!
+!
+interface FastEthernet0/1
+ description Indskoling
+ switchport access vlan 10
+ switchport mode access
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+!
+interface FastEthernet0/2
+ description Mellemtrin
+ switchport access vlan 12
+ switchport mode access
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+!
+interface FastEthernet0/3
+ description Udskoling
+ switchport access vlan 14
+ switchport mode access
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+!
+interface FastEthernet0/4
+ description Personale
+ switchport access vlan 20
+ switchport mode access
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+!
+interface FastEthernet0/5
+ description Print
+ switchport access vlan 50
+ switchport mode access
+!
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+!
+interface FastEthernet0/8
+!
+interface FastEthernet0/9
+!
+interface FastEthernet0/10
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+ description Access-point
+ switchport trunk native vlan 90
+ switchport trunk allowed vlan 10,12,14,20,90
+ switchport mode trunk
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+!
+interface FastEthernet0/20
+!
+interface FastEthernet0/21
+ description CLIENT
+ switchport access vlan 90
+ switchport mode access
+!
+interface FastEthernet0/22
+ description SERVER
+ switchport trunk native vlan 90
+ switchport trunk allowed vlan 10,12,14,20,50,90
+ switchport mode trunk
+!
+interface FastEthernet0/23
+ description FIREWALL_TRUNK
+ switchport trunk allowed vlan 10,12,14,20,50,90
+ switchport mode trunk
+!
+interface FastEthernet0/24
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet0/2
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan10
+ no ip address
+!
+interface Vlan12
+ no ip address
+!
+interface Vlan14
+ no ip address
+!
+interface Vlan20
+ no ip address
+!
+interface Vlan50
+ no ip address
+!
+interface Vlan90
+ ip address 10.1.90.10 255.255.255.0
+!
+ip default-gateway 10.1.90.1
+ip http server
+ip http secure-server
+!
+!
+line con 0
+ password admin
+ login
+line vty 0 4
+ login local
+ transport input ssh
+line vty 5 15
+ login local
+ transport input ssh
+!
+ntp server 10.0.40.100
+end
+
