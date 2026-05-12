@@ -1,0 +1,407 @@
+! Cisco IOS Software, C2960 Software (C2960-LANBASEK9-M), Version 15.0(2)SE11, RELEASE SOFTWARE (fc3)
+! 
+! Image: Software: C2960-LANBASEK9-M, 15.0(2)SE11, RELEASE SOFTWARE (fc3)
+! Image: Compiled: Sat 19-Aug-17 09:34 by prod_rel_team
+! Image: flash:c2960-lanbasek9-mz.150-2.SE11/c2960-lanbasek9-mz.150-2.SE11.bin
+! Chassis type: WS-C2960-48TC-L
+! Memory: main 65536K
+! Processor ID: FOC1245Y1EX
+! CPU: PowerPC405
+! 
+! VTP: VTP Version capable             : 1 to 3
+! VTP: VTP version running             : 1
+! VTP: VTP Domain Name                 : 
+! VTP: VTP Pruning Mode                : Disabled
+! VTP: VTP Traps Generation            : Disabled
+! VTP: Device ID                       : 0024.1304.9a00
+! VTP: Local updater ID is 10.0.90.10 on interface Vl90 (lowest numbered VLAN interface found)
+! VTP: Feature VLAN:
+! VTP: --------------
+! VTP: VTP Operating Mode                : Server
+! VTP: Maximum VLANs supported locally   : 255
+! VTP: Number of existing VLANs          : 9
+! VTP: Configuration Revision            : 7
+! VTP: MD5 digest                        : 0xD4 0xCD 0x52 0xF7 0x2E 0x7B 0x95 0xE7 
+! VTP:                                     0xC7 0x89 0x0A 0x41 0x56 0x98 0x4F 0xB6 
+! 
+! NAME: "1", DESCR: "WS-C2960-48TC-L"
+! PID: WS-C2960-48TC-L   , VID: V04  , SN: FOC1245Y1EX
+! 
+! 
+!
+! Last configuration change at 09:23:31 CEST Tue May 12 2026 by admin
+! NVRAM config last updated at 09:25:41 CEST Tue May 12 2026 by admin
+!
+version 15.0
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname L2S1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+username admin privilege 15 secret 5 $1$2xRn$76JILyeodZi1ok3sFTZ/h1
+no aaa new-model
+clock timezone CET 1 0
+clock summer-time CEST recurring
+system mtu routing 1500
+!
+!
+no ip domain-lookup
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+ip ssh version 2
+!
+!
+!
+!
+!
+interface Port-channel1
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 30,40,90
+ switchport mode trunk
+!
+interface Port-channel2
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 30,40,90
+ switchport mode trunk
+!
+interface FastEthernet0/1
+ description Printer_Main_Site
+ switchport access vlan 30
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/2
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/3
+ description MGMT access
+ switchport access vlan 90
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/4
+ description MGMT access
+ switchport access vlan 90
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/5
+ description MGMT access
+ switchport access vlan 90
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/6
+ description MGMT access
+ switchport access vlan 90
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/7
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/8
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/9
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/10
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/11
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/12
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/13
+ switchport trunk native vlan 90
+ switchport trunk allowed vlan 30,40,90
+ switchport mode trunk
+!
+interface FastEthernet0/14
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/15
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/16
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/17
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/18
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/19
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/20
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/21
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/22
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/23
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/24
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/25
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/26
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/27
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/28
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/29
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/30
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/31
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/32
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/33
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/34
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/35
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/36
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/37
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/38
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/39
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/40
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/41
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/42
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/43
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/44
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/45
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 30,40,90
+ switchport mode trunk
+ channel-group 2 mode active
+!
+interface FastEthernet0/46
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 30,40,90
+ switchport mode trunk
+ channel-group 2 mode active
+!
+interface FastEthernet0/47
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 30,40,90
+ switchport mode trunk
+ channel-group 1 mode active
+!
+interface FastEthernet0/48
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 30,40,90
+ switchport mode trunk
+ channel-group 1 mode active
+!
+interface GigabitEthernet0/1
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet0/2
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan90
+ ip address 10.0.90.10 255.255.255.0
+!
+ip http server
+ip http secure-server
+!
+vstack
+!
+line con 0
+line vty 0 4
+ password 7 020700560208
+ login local
+ transport input ssh
+line vty 5 15
+ password 7 020700560208
+ login local
+ transport input ssh
+!
+ntp server 10.0.40.100
+end
+
