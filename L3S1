@@ -1,0 +1,336 @@
+! Cisco IOS Software, C3560 Software (C3560-IPSERVICESK9-M), Version 12.2(55)SE12, RELEASE SOFTWARE (fc2)
+! 
+! Image: Software: C3560-IPSERVICESK9-M, 12.2(55)SE12, RELEASE SOFTWARE (fc2)
+! Image: Compiled: Thu 28-Sep-17 02:04 by prod_rel_team
+! Image: flash:/c3560-ipservicesk9-mz.122-55.SE12.bin
+! Chassis type: WS-C3560G-24PS
+! Memory: main 131072K
+! Processor ID: FOC1352W09R
+! CPU: PowerPC405
+! 
+! VTP: VTP Version capable             : 1 to 3
+! VTP: VTP version running             : 1
+! VTP: VTP Domain Name                 : 
+! VTP: VTP Pruning Mode                : Disabled
+! VTP: VTP Traps Generation            : Disabled
+! VTP: Device ID                       : 0064.40ab.0e00
+! VTP: Local updater ID is 10.0.30.2 on interface Vl30 (lowest numbered VLAN interface found)
+! VTP: Feature VLAN:
+! VTP: --------------
+! VTP: VTP Operating Mode                : Server
+! VTP: Maximum VLANs supported locally   : 1005
+! VTP: Number of existing VLANs          : 10
+! VTP: Configuration Revision            : 6
+! VTP: MD5 digest                        : 0x2E 0xAC 0xAC 0x67 0x42 0x9D 0x41 0x4B 
+! VTP:                                     0x07 0x4A 0x45 0x39 0x94 0x1A 0xCE 0x29 
+! 
+! NAME: "1", DESCR: "WS-C3560G-24PS"
+! PID: WS-C3560G-24PS-S  , VID: V06  , SN: FOC1352W09R
+! 
+! 
+!
+! Last configuration change at 11:54:09 CEST Tue May 12 2026 by admin
+! NVRAM config last updated at 11:54:10 CEST Tue May 12 2026 by admin
+!
+version 12.2
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname L3S1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+username admin privilege 15 secret 5 $1$U/7n$vZeKvvPOgBzm/cjRk8yuv1
+!
+!
+no aaa new-model
+clock timezone CET 1
+clock summer-time CEST recurring
+system mtu routing 1500
+ip routing
+ip domain-name virkom.local
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+ip ssh version 2
+!
+!
+!
+interface Port-channel1
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 30,40,90
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface Port-channel2
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 30,40,90
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface Port-channel3
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 30,40,90,99
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface GigabitEthernet0/1
+ description uplink to FW1
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 99
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface GigabitEthernet0/2
+ description Uplink to FW2
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 99
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface GigabitEthernet0/3
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 30,40,90,99
+ switchport mode trunk
+ switchport nonegotiate
+ channel-group 3 mode active
+!
+interface GigabitEthernet0/4
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 30,40,90,99
+ switchport mode trunk
+ switchport nonegotiate
+ channel-group 3 mode active
+!
+interface GigabitEthernet0/5
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet0/6
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet0/7
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet0/8
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet0/9
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet0/10
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet0/11
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet0/12
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet0/13
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet0/14
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet0/15
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet0/16
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet0/17
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet0/18
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet0/19
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet0/20
+ description Unused - Native
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet0/21
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 30,40,90
+ switchport mode trunk
+ switchport nonegotiate
+ channel-group 2 mode active
+!
+interface GigabitEthernet0/22
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 30,40,90
+ switchport mode trunk
+ switchport nonegotiate
+ channel-group 2 mode active
+!
+interface GigabitEthernet0/23
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 30,40,90
+ switchport mode trunk
+ switchport nonegotiate
+ channel-group 1 mode active
+!
+interface GigabitEthernet0/24
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 30,40,90
+ switchport mode trunk
+ switchport nonegotiate
+ channel-group 1 mode active
+!
+interface GigabitEthernet0/25
+ no switchport
+ no ip address
+!
+interface GigabitEthernet0/26
+ no switchport
+ no ip address
+!
+interface GigabitEthernet0/27
+ no switchport
+ no ip address
+!
+interface GigabitEthernet0/28
+ no switchport
+ no ip address
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan30
+ description Server SVI
+ ip address 10.0.30.2 255.255.255.0
+ standby 30 ip 10.0.30.1
+ standby 30 priority 110
+ standby 30 preempt
+ standby 30 track 1 decrement 30
+!
+interface Vlan40
+ description Services SVI
+ ip address 10.0.40.2 255.255.255.0
+ standby 40 ip 10.0.40.1
+ standby 40 priority 110
+ standby 40 preempt
+ standby 40 track 1 decrement 30
+!
+interface Vlan90
+ description MGMT SVI
+ ip address 10.0.90.2 255.255.255.0
+ standby 90 ip 10.0.90.1
+ standby 90 priority 110
+ standby 90 preempt
+ standby 90 track 1 decrement 30
+!
+interface Vlan99
+ description Transit SVI
+ ip address 10.0.99.2 255.255.255.248
+ ip ospf network broadcast
+!
+router ospf 10
+ router-id 2.2.2.2
+ log-adjacency-changes
+ passive-interface default
+ no passive-interface Vlan99
+ network 10.0.30.0 0.0.0.255 area 0
+ network 10.0.40.0 0.0.0.255 area 0
+ network 10.0.90.0 0.0.0.255 area 0
+ network 10.0.99.0 0.0.0.7 area 0
+!
+ip classless
+ip route 172.16.1.0 255.255.255.0 10.0.99.1
+ip http server
+ip http secure-server
+!
+!
+logging host 10.0.40.100 transport udp port 1514
+!
+!
+vstack
+!
+line con 0
+line vty 0 4
+ exec-timeout 15 0
+ login local
+ transport input ssh
+line vty 5 15
+ exec-timeout 15 0
+ login local
+ transport input ssh
+!
+ntp server 10.0.40.100
+end
+
