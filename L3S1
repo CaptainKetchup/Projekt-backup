@@ -29,13 +29,13 @@
 ! 
 ! 
 !
-! Last configuration change at 11:54:09 CEST Tue May 12 2026 by admin
-! NVRAM config last updated at 11:54:10 CEST Tue May 12 2026 by admin
+! Last configuration change at 21:16:39 CEST Fri May 15 2026 by admin
+! NVRAM config last updated at 21:17:59 CEST Fri May 15 2026 by admin
 !
 version 12.2
 no service pad
 service timestamps debug datetime msec
-service timestamps log datetime msec
+service timestamps log datetime msec localtime show-timezone
 no service password-encryption
 !
 hostname L3S1
@@ -51,18 +51,55 @@ no aaa new-model
 clock timezone CET 1
 clock summer-time CEST recurring
 system mtu routing 1500
+!
+track 1 ip sla 1 reachability
 ip routing
 ip domain-name virkom.local
 !
 !
 !
 !
+crypto pki trustpoint TP-self-signed-1084952064
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1084952064
+ revocation-check none
+ rsakeypair TP-self-signed-1084952064
+!
+!
+crypto pki certificate chain TP-self-signed-1084952064
+ certificate self-signed 01
+  30820249 308201B2 A0030201 02020101 300D0609 2A864886 F70D0101 04050030 
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274 
+  69666963 6174652D 31303834 39353230 3634301E 170D3933 30333031 30303031 
+  33365A17 0D323030 31303130 30303030 305A3031 312F302D 06035504 03132649 
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D31 30383439 
+  35323036 3430819F 300D0609 2A864886 F70D0101 01050003 818D0030 81890281 
+  8100C5CF 1DC9BCD5 D9796DD8 A66DC5EA AECC96A6 E1ABE79C 0F8DA76C 21D664E6 
+  8DF4A562 DFDC0D54 F82DBBE9 044C8F62 F2507DA3 D4302368 1C07C2C1 029F9373 
+  3A27DA9B 3542D07F D9E1584A 246C4BA8 FBE022A2 25203934 D4A7CCC2 5474FB97 
+  7CE2C64F 0445AA3F 598F72DA 1D0F6B03 AFE2E80A 3B87B784 80A1181D 4A819EBE 
+  63370203 010001A3 71306F30 0F060355 1D130101 FF040530 030101FF 301C0603 
+  551D1104 15301382 114C3353 312E7669 726B6F6D 2E6C6F63 616C301F 0603551D 
+  23041830 16801478 722561B4 5FFA65C8 30325952 08F805A7 254F6130 1D060355 
+  1D0E0416 04147872 2561B45F FA65C830 32595208 F805A725 4F61300D 06092A86 
+  4886F70D 01010405 00038181 0014AE56 7F2EB1C6 18F47075 CBF00A7F 58D019AD 
+  DF9EACC6 B6CAF839 4F3FE0FB 8B38D53A 7779BEE6 9838BCD6 F3203BAC F61F50D9 
+  EEF5EF38 D5DE37B7 986C2414 E523ED18 58852085 168491F1 450277D3 89EB1EDD 
+  231ABCF0 2022A29C B8600EC5 3CCB393E 93326AB0 2C5AAB31 8066B252 3FA64C24 
+  815ACD16 D006FDE1 32451A52 95
+  quit
 !
 !
 !
+archive
+ log config
+  logging enable
+  notify syslog contenttype plaintext
+  hidekeys
 !
 spanning-tree mode pvst
 spanning-tree extend system-id
+spanning-tree vlan 30,40,90 priority 24576
 !
 vlan internal allocation policy ascending
 !
@@ -274,6 +311,7 @@ interface Vlan1
 interface Vlan30
  description Server SVI
  ip address 10.0.30.2 255.255.255.0
+ ip access-group ZT_VLAN30_IN in
  standby 30 ip 10.0.30.1
  standby 30 priority 110
  standby 30 preempt
@@ -282,6 +320,7 @@ interface Vlan30
 interface Vlan40
  description Services SVI
  ip address 10.0.40.2 255.255.255.0
+ ip access-group ZT_VLAN40_IN in
  standby 40 ip 10.0.40.1
  standby 40 priority 110
  standby 40 preempt
@@ -316,6 +355,80 @@ ip http server
 ip http secure-server
 !
 !
+ip access-list standard SSH_ACCESS
+ permit 10.0.30.200
+ permit 10.0.90.0 0.0.0.255
+!
+ip access-list extended ZT_VLAN30_IN
+ remark --- TILLAD RETURTRAFIK TIL SESSIONER STARTET UDEFRA ---
+ permit tcp 10.0.30.0 0.0.0.255 10.0.40.0 0.0.0.255 established
+ remark --- TILLAD UDP RETURTRAFIK TIL RDP ---
+ permit udp host 10.0.30.20 eq 3389 10.0.90.0 0.0.0.255
+ permit udp host 10.0.30.10 eq 3389 10.0.90.0 0.0.0.255
+ remark --- TILLAD ICMP DESTINATION UNREACHABLE FRA SERVER-VLAN ---
+ permit icmp 10.0.30.0 0.0.0.255 10.0.40.0 0.0.0.255 unreachable
+ permit udp 10.0.30.0 0.0.0.255 eq 3389 10.0.90.0 0.0.0.255
+ permit tcp 10.0.30.0 0.0.0.255 10.0.90.0 0.0.0.255 established
+ remark --- TILLAD UDP-SVAR FRA DNS (HVIS ADMIN PC ELLER DOCKER SPOERGER) ---
+ permit udp host 10.0.30.10 eq domain any
+ permit udp host 10.0.30.20 eq domain any
+ remark --- TILLAD SYSLOG FRA SERVERE MOD GRAYLOG ---
+ permit udp 10.0.30.0 0.0.0.255 host 10.0.40.100 eq 1514
+ permit udp 10.0.30.0 0.0.0.255 host 10.0.40.100 eq 1515
+ remark --- TILLAD SERVERE AT HENTE TID FRA DOCKER NTP ---
+ permit udp 10.0.30.0 0.0.0.255 host 10.0.40.100 eq ntp
+ remark --- TILLAD PRTG (10.0.30.150) AT OVERVAAGE UDSTYR ---
+ permit udp host 10.0.30.150 any eq snmp
+ permit icmp host 10.0.30.150 any echo
+ permit tcp host 10.0.30.150 10.0.90.0 0.0.0.255 eq 443
+ permit tcp host 10.0.30.150 10.0.90.0 0.0.0.255 eq 22
+ permit tcp host 10.0.30.150 host 10.0.40.100 eq 1883
+ remark --- TILLAD BACKUP OG OXIDIZED MOD MANAGEMENT ---
+ permit tcp host 10.0.30.100 10.0.90.0 0.0.0.255 eq 8006
+ permit tcp host 10.0.30.100 10.0.90.0 0.0.0.255 eq 22
+ remark --- TILLAD BACKUP MOD DOCKER (VEEAM & MANAGEMENT) ---
+ permit tcp host 10.0.30.100 host 10.0.40.100 eq 22
+ permit tcp host 10.0.30.100 host 10.0.40.100 eq 135
+ permit tcp host 10.0.30.100 host 10.0.40.100 eq 445
+ permit tcp host 10.0.30.100 host 10.0.40.100 eq 6160
+ permit tcp host 10.0.30.100 host 10.0.40.100 eq 11731
+ permit icmp host 10.0.30.100 host 10.0.40.100 echo
+ permit tcp host 10.0.30.100 host 10.0.40.100 eq 6162
+ permit tcp host 10.0.30.200 10.0.90.0 0.0.0.255 eq 22
+ permit tcp host 10.0.30.200 10.0.90.0 0.0.0.255 eq 443
+ remark --- BLOKER AL ANDEN TRAFIK MOD VLAN 40 OG 90 ---
+ deny   ip 10.0.30.0 0.0.0.255 10.0.40.0 0.0.0.255 log
+ deny   ip 10.0.30.0 0.0.0.255 10.0.90.0 0.0.0.255 log
+ remark --- TILLAD INTERNET TRAFIK ---
+ permit ip any any
+ip access-list extended ZT_VLAN40_IN
+ permit icmp 10.0.40.0 0.0.0.255 10.0.30.0 0.0.0.255
+ remark --- TILLAD RETURTRAFIK TIL SESSIONER STARTET UDEFRA ---
+ permit tcp 10.0.40.0 0.0.0.255 10.0.30.0 0.0.0.255 established
+ permit tcp 10.0.40.0 0.0.0.255 10.0.90.0 0.0.0.255 established
+ remark --- TILLAD DOCKER AT BRUGE DNS & AD DC1 OG DC2 ---
+ permit udp host 10.0.40.100 host 10.0.30.10 eq domain
+ permit udp host 10.0.40.100 host 10.0.30.20 eq domain
+ permit tcp host 10.0.40.100 10.0.30.0 0.0.0.255 eq 389
+ permit tcp host 10.0.40.100 10.0.30.0 0.0.0.255 eq 636
+ permit tcp host 10.0.40.100 10.0.30.0 0.0.0.255 eq 88
+ remark --- TILLAD NTP-SERVER I DOCKER AT SVARE PAA FORESPOERGSILER ---
+ permit udp host 10.0.40.100 eq ntp 10.0.30.0 0.0.0.255
+ permit udp host 10.0.40.100 eq ntp 10.0.90.0 0.0.0.255
+ remark --- TILLAD ICMP SVAR TILBAGE TIL BACKUP SERVER ---
+ permit icmp host 10.0.40.100 host 10.0.30.100 echo-reply
+ remark --- BLOKER AL ANDEN TRAFIK MOD VLAN 30 OG 90 ---
+ deny   ip 10.0.40.0 0.0.0.255 10.0.30.0 0.0.0.255 log
+ deny   ip 10.0.40.0 0.0.0.255 10.0.90.0 0.0.0.255 log
+ remark --- TILLAD INTERNET TRAFIK ---
+ permit ip any any
+!
+ip sla 1
+ icmp-echo 10.0.99.1 source-ip 10.0.99.2
+ frequency 5
+ip sla schedule 1 life forever start-time now
+logging origin-id hostname
+logging source-interface Vlan90
 logging host 10.0.40.100 transport udp port 1514
 !
 !
@@ -323,10 +436,12 @@ vstack
 !
 line con 0
 line vty 0 4
+ access-class SSH_ACCESS in
  exec-timeout 15 0
  login local
  transport input ssh
 line vty 5 15
+ access-class SSH_ACCESS in
  exec-timeout 15 0
  login local
  transport input ssh
