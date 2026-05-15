@@ -29,7 +29,7 @@
 ! 
 ! 
 !
-! Last configuration change at 14:39:22 CEST Thu May 14 2026 by admin
+! Last configuration change at 21:18:39 CEST Fri May 15 2026 by admin
 ! NVRAM config last updated at 14:39:23 CEST Thu May 14 2026 by admin
 !
 version 15.0
@@ -231,6 +231,10 @@ interface Vlan90
 ip default-gateway 10.1.90.1
 ip http server
 ip http secure-server
+!
+ip access-list standard SSH_ACCESS
+ permit 10.0.30.200
+ permit 10.0.90.0 0.0.0.255
 logging origin-id hostname
 logging host 10.0.40.100 transport udp port 1514
 !
@@ -239,9 +243,11 @@ line con 0
  password admin
  login
 line vty 0 4
+ access-class SSH_ACCESS in
  login local
  transport input ssh
 line vty 5 15
+ access-class SSH_ACCESS in
  login local
  transport input ssh
 !
