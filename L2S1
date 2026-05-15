@@ -29,13 +29,13 @@
 ! 
 ! 
 !
-! Last configuration change at 09:23:31 CEST Tue May 12 2026 by admin
-! NVRAM config last updated at 09:25:41 CEST Tue May 12 2026 by admin
+! Last configuration change at 21:18:13 CEST Fri May 15 2026 by admin
+! NVRAM config last updated at 21:18:14 CEST Fri May 15 2026 by admin
 !
 version 15.0
 no service pad
 service timestamps debug datetime msec
-service timestamps log datetime msec
+service timestamps log datetime msec localtime show-timezone
 service password-encryption
 !
 hostname L2S1
@@ -52,6 +52,7 @@ system mtu routing 1500
 !
 !
 no ip domain-lookup
+ip domain-name virkom.local
 !
 !
 !
@@ -60,6 +61,11 @@ no ip domain-lookup
 !
 !
 !
+archive
+ log config
+  logging enable
+  notify syslog contenttype plaintext
+  hidekeys
 spanning-tree mode pvst
 spanning-tree extend system-id
 !
@@ -390,15 +396,21 @@ interface Vlan90
 ip http server
 ip http secure-server
 !
+ip access-list standard SSH_ACCESS
+ permit 10.0.30.200
+ permit 10.0.90.0 0.0.0.255
+logging origin-id hostname
+logging host 10.0.40.100 transport udp port 1514
+!
 vstack
 !
 line con 0
 line vty 0 4
- password 7 020700560208
+ access-class SSH_ACCESS in
  login local
  transport input ssh
 line vty 5 15
- password 7 020700560208
+ access-class SSH_ACCESS in
  login local
  transport input ssh
 !
