@@ -10,7 +10,7 @@
 # BIOS version: 05000011
 # System Part-Number: P17455-03
 # Log hard disk: Not available
-# Hostname: Site2-Skole
+# Hostname: S2-FW1
 # Private Encryption: Disable
 # Operation Mode: NAT
 # Current virtual domain: root
@@ -20,15 +20,15 @@
 # FIPS-CC mode: disable
 # Current HA mode: standalone
 # Branch point: 1378
-# System time: Tue May 12 11:57:22 2026
+# System time: Fri May 15 20:42:28 2026
 # 
 # 
-#conf_file_ver=184692183705586
+#conf_file_ver=191976448241293
 #buildno=1378
 #global_vdom=1
 config system global
     set alias "FortiGate-30E"
-    set hostname "Site2-Skole"
+    set hostname "S2-FW1"
     set switch-controller enable
     set timezone 28
 end
@@ -67,104 +67,11 @@ config system interface
         set alias "SSL VPN interface"
         set snmp-index 3
     next
-    edit "fortilink"
-        set vdom "root"
-        set fortilink enable
-        set ip 169.254.1.1 255.255.255.0
-        set allowaccess ping fabric
-        set type hard-switch
-        set lldp-reception enable
-        set lldp-transmission enable
-        set snmp-index 5
-    next
     edit "lan1"
         set vdom "root"
-        set dhcp-relay-service enable
-        set allowaccess ping https ssh
         set type physical
-        set alias "TRUNK"
-        set device-identification enable
-        set lldp-transmission enable
         set role lan
         set snmp-index 6
-        set dhcp-relay-ip "10.0.30.11" "10.0.30.21" 
-    next
-    edit "VLAN90"
-        set vdom "root"
-        set ip 10.1.90.1 255.255.255.0
-        set allowaccess ping https ssh
-        set device-identification enable
-        set role lan
-        set snmp-index 7
-        set interface "lan1"
-        set vlanid 90
-    next
-    edit "VLAN10_Indskole"
-        set vdom "root"
-        set dhcp-relay-service enable
-        set ip 10.1.10.1 255.255.254.0
-        set allowaccess ping https ssh
-        set device-identification enable
-        set role lan
-        set snmp-index 8
-        set dhcp-relay-ip "10.0.30.11" "10.0.30.21" 
-        set interface "lan1"
-        set vlanid 10
-    next
-    edit "VLAN12_Mellem"
-        set vdom "root"
-        set dhcp-relay-service enable
-        set ip 10.1.12.1 255.255.254.0
-        set allowaccess ping https ssh
-        set device-identification enable
-        set role lan
-        set snmp-index 9
-        set dhcp-relay-ip "10.0.30.11" "10.0.30.21" 
-        set interface "lan1"
-        set vlanid 12
-    next
-    edit "VLAN14_Udskole"
-        set vdom "root"
-        set dhcp-relay-service enable
-        set ip 10.1.14.1 255.255.254.0
-        set allowaccess ping https ssh
-        set device-identification enable
-        set role lan
-        set snmp-index 10
-        set dhcp-relay-ip "10.0.30.11" "10.0.30.21" 
-        set interface "lan1"
-        set vlanid 14
-    next
-    edit "VLAN20_Personal"
-        set vdom "root"
-        set dhcp-relay-service enable
-        set ip 10.1.20.1 255.255.255.0
-        set allowaccess ping https ssh
-        set device-identification enable
-        set role lan
-        set snmp-index 11
-        set dhcp-relay-ip "10.0.30.11" "10.0.30.21" 
-        set interface "lan1"
-        set vlanid 20
-    next
-    edit "VLAN50_Svr/prnt"
-        set vdom "root"
-        set ip 10.1.50.1 255.255.255.0
-        set allowaccess ping https ssh
-        set device-identification enable
-        set role lan
-        set snmp-index 12
-        set interface "lan1"
-        set vlanid 50
-    next
-    edit "Main site tunel"
-        set vdom "root"
-        set ip 10.255.255.2 255.255.255.255
-        set allowaccess ping https http
-        set type tunnel
-        set remote-ip 10.255.255.2 255.255.255.252
-        set snmp-index 13
-        set interface "wan"
     next
     edit "lan2"
         set vdom "root"
@@ -180,6 +87,108 @@ config system interface
         set vdom "root"
         set type physical
         set snmp-index 15
+    next
+    edit "fortilink"
+        set vdom "root"
+        set fortilink enable
+        set ip 169.254.1.1 255.255.255.0
+        set allowaccess ping fabric
+        set status down
+        set type hard-switch
+        set lldp-reception enable
+        set lldp-transmission enable
+        set snmp-index 5
+    next
+    edit "Main site tunel"
+        set vdom "root"
+        set ip 10.255.255.2 255.255.255.255
+        set allowaccess ping https http
+        set type tunnel
+        set remote-ip 10.255.255.1 255.255.255.252
+        set snmp-index 13
+        set interface "wan"
+    next
+    edit "LAG_LAN"
+        set vdom "root"
+        set dhcp-relay-service enable
+        set allowaccess ping https ssh
+        set type aggregate
+        set member "lan2" "lan3" "lan4" "lan1"
+        set alias "TRUNK"
+        set device-identification enable
+        set lldp-transmission enable
+        set role lan
+        set snmp-index 16
+        set dhcp-relay-ip "10.0.30.11" "10.0.30.21" 
+        set lacp-speed fast
+    next
+    edit "VLAN10_Indskole"
+        set vdom "root"
+        set dhcp-relay-service enable
+        set ip 10.1.10.1 255.255.254.0
+        set allowaccess ping https ssh
+        set device-identification enable
+        set role lan
+        set snmp-index 8
+        set dhcp-relay-ip "10.0.30.11" "10.0.30.21" 
+        set interface "LAG_LAN"
+        set vlanid 10
+    next
+    edit "VLAN12_Mellem"
+        set vdom "root"
+        set dhcp-relay-service enable
+        set ip 10.1.12.1 255.255.254.0
+        set allowaccess ping https ssh
+        set device-identification enable
+        set role lan
+        set snmp-index 9
+        set dhcp-relay-ip "10.0.30.11" "10.0.30.21" 
+        set interface "LAG_LAN"
+        set vlanid 12
+    next
+    edit "VLAN14_Udskole"
+        set vdom "root"
+        set dhcp-relay-service enable
+        set ip 10.1.14.1 255.255.254.0
+        set allowaccess ping https ssh
+        set device-identification enable
+        set role lan
+        set snmp-index 10
+        set dhcp-relay-ip "10.0.30.11" "10.0.30.21" 
+        set interface "LAG_LAN"
+        set vlanid 14
+    next
+    edit "VLAN20_Personal"
+        set vdom "root"
+        set dhcp-relay-service enable
+        set ip 10.1.20.1 255.255.255.0
+        set allowaccess ping https ssh
+        set device-identification enable
+        set role lan
+        set snmp-index 11
+        set dhcp-relay-ip "10.0.30.11" "10.0.30.21" 
+        set interface "LAG_LAN"
+        set vlanid 20
+    next
+    edit "VLAN50_Svr/prnt"
+        set vdom "root"
+        set ip 10.1.50.1 255.255.255.0
+        set allowaccess ping https ssh
+        set device-identification enable
+        set role lan
+        set snmp-index 12
+        set interface "LAG_LAN"
+        set vlanid 50
+    next
+    edit "VLAN90"
+        set vdom "root"
+        set ip 10.1.90.1 255.255.255.0
+        set allowaccess ping https ssh
+        set device-identification enable
+        set role lan
+        set snmp-index 7
+        set interface "LAG_LAN"
+        set vlanid 90
     next
 end
 config system physical-switch
@@ -220,6 +229,8 @@ config system custom-language
 end
 config system admin
     edit "admin"
+        set trusthost1 10.0.90.0 255.255.255.0
+        set trusthost2 10.0.30.200 255.255.255.255
         set accprofile "super_admin"
         set vdom "root"
         set password ENC SH27e1PXLtq46XQvH78GOL6mAEgPl5jLbg0VD/YWIsB0SIcJhMmFQlvgegP8r0=
@@ -523,8 +534,16 @@ config system fortiguard
 end
 config ips global
 end
-config log fortiguard setting
+config log syslogd setting
     set status enable
+    set server "10.0.40.100"
+    set port 1515
+end
+config log syslogd filter
+    set severity warning
+    set forward-traffic disable
+    set local-traffic disable
+    set multicast-traffic disable
 end
 config system email-server
     set server "notification.fortinet.net"
@@ -748,46 +767,68 @@ config firewall address
         set start-ip 10.212.134.200
         set end-ip 10.212.134.210
     next
-    edit "VLAN90 address"
-        set uuid e8bd6f3c-47b9-51f1-49b0-40f842a3b41a
-        set type interface-subnet
-        set subnet 10.1.90.1 255.255.255.0
-        set interface "VLAN90"
-    next
-    edit "VLAN10_Indskole address"
-        set uuid 2fb0ca96-4856-51f1-18c6-4861f3aac043
-        set type interface-subnet
-        set subnet 10.1.10.1 255.255.254.0
-        set interface "VLAN10_Indskole"
-    next
-    edit "VLAN12_Mellem address"
-        set uuid d5bf577c-4856-51f1-f08f-6257dad04475
-        set type interface-subnet
-        set subnet 10.1.12.1 255.255.254.0
-        set interface "VLAN12_Mellem"
-    next
-    edit "VLAN14_Udskole address"
-        set uuid f0c0c538-4856-51f1-a785-e33c7b6ddda7
-        set type interface-subnet
-        set subnet 10.1.14.1 255.255.254.0
-        set interface "VLAN14_Udskole"
-    next
-    edit "VLAN20_Personal address"
-        set uuid 060f8c08-4857-51f1-607c-55d3ea6fd243
-        set type interface-subnet
-        set subnet 10.1.20.1 255.255.255.0
-        set interface "VLAN20_Personal"
-    next
-    edit "VLAN50_Svr/prnt address"
-        set uuid 2af905ee-4857-51f1-8258-d4ab9c03a5a6
-        set type interface-subnet
-        set subnet 10.1.50.1 255.255.255.0
-        set interface "VLAN50_Svr/prnt"
-    next
     edit "DMZ"
         set uuid 74f80e94-4a08-51f1-9e8f-b481e64de49d
         set associated-interface "Main site tunel"
         set subnet 172.16.1.0 255.255.255.0
+    next
+    edit "NET_Main_VLAN30_Servers"
+        set uuid ef611962-4f69-51f1-52e3-f408d14ac6b3
+        set subnet 10.0.30.0 255.255.255.0
+    next
+    edit "NET_Main_VLAN40_Services"
+        set uuid f8e6ab96-4f69-51f1-b752-ed3963be2957
+        set subnet 10.0.40.0 255.255.255.0
+    next
+    edit "NET_Main_VLAN90_Mgmt"
+        set uuid 03077f6a-4f6a-51f1-2c9b-5ed5b85b49e8
+        set subnet 10.0.90.0 255.255.255.0
+    next
+    edit "NET_Branch_VLAN90_Mgmt"
+        set uuid 0ddefb7a-4f6a-51f1-2748-bc62381312cd
+        set color 6
+        set subnet 10.1.90.0 255.255.255.0
+    next
+    edit "HOST_Main_DC1"
+        set uuid 1b13bde4-4f6a-51f1-64e2-cb971c3fd844
+        set subnet 10.0.90.11 255.255.255.255
+    next
+    edit "HOST_Main_DC2"
+        set uuid 67b44d62-4f6f-51f1-bb0f-fa010ffabff2
+        set subnet 10.0.90.12 255.255.255.255
+    next
+    edit "HOST_Main_Docker_NTP"
+        set uuid 83d1b566-4f6f-51f1-5ab7-a32aa0b51464
+        set subnet 10.0.40.100 255.255.255.255
+    next
+    edit "HOST_Main_PRTG"
+        set uuid 9f1a62b4-4f6f-51f1-abcf-a0d799ffe268
+        set subnet 10.0.30.150 255.255.255.255
+    next
+    edit "NET_BRANCH_VLAN10_INDSKOLING"
+        set uuid 57321022-4f70-51f1-b6c8-2755f56c07cc
+        set color 6
+        set subnet 10.1.10.0 255.255.254.0
+    next
+    edit "NET_BRANCH_VLAN12_MELLEMTRIN"
+        set uuid 8a3bfb90-4f70-51f1-a74d-be1859e3229f
+        set color 6
+        set subnet 10.1.12.0 255.255.254.0
+    next
+    edit "NET_BRANCH_VLAN14_UDSKOLING"
+        set uuid a2273558-4f70-51f1-8cf5-03f60e6c553a
+        set color 6
+        set subnet 10.1.14.0 255.255.254.0
+    next
+    edit "NET_BRANCH_VLAN20_PERSONALE"
+        set uuid 9b4239a2-4f72-51f1-3f19-0a30fde5118d
+        set color 6
+        set subnet 10.1.20.0 255.255.255.0
+    next
+    edit "NET_Branch_VLAN50_Lokal_Server_Print"
+        set uuid 06671642-4f75-51f1-3bf2-37e3440a13a8
+        set color 6
+        set subnet 10.1.50.0 255.255.255.0
     next
 end
 config firewall multicast-address
@@ -842,6 +883,11 @@ config firewall addrgrp
     edit "Microsoft Office 365"
         set uuid 52d1d06c-47b4-51f1-f69d-ece83cad9344
         set member "login.microsoftonline.com" "login.microsoft.com" "login.windows.net"
+    next
+    edit "GRP_Branch_Elev_Nets"
+        set uuid 13f440ae-4f71-51f1-9e3c-9451bfb2a8e8
+        set member "NET_BRANCH_VLAN10_INDSKOLING" "NET_BRANCH_VLAN12_MELLEMTRIN" "NET_BRANCH_VLAN14_UDSKOLING"
+        set color 7
     next
 end
 config firewall wildcard-fqdn custom
@@ -1393,79 +1439,79 @@ config vpn certificate ca
 end
 config vpn certificate local
     edit "Fortinet_CA_SSL"
-        set password ENC ntJBOU/FkCgPZ6c3IpYfXrtSAh3EbR8b16sH1ORsz470S8klehBswF7wF/FDH380f2xwSDsIsMZgr7BZJsKSHrkfmWkLsbb+njfhkPABRC1nMsog3kFbtqUxCgIliBX/e4eYCLRqiFHJTgXYpoOS5OqU6QvwX6zmEUWNEyOjkXGLcUvSinxeQf2tN4pp2jbaZr/QWA==
+        set password ENC N2r5jKqBqDDlb62lirpvSHGnsntUrjKjDrkPtq7SF7Bqf4Q6hR+o/jz8d7FEnKB8avfHYj6BoWiwc6EjnVGLRo3aX2F0WRxRA5TathesB4kpXJss9GAtPLZE8VCSJHR/+gOvLKeFwhWwyzZqg52F2LX1CfySsHEOSPDD3+pRnJqptcC8kZnoRng43XM5uStAkvUJPw==
         set comments "This is the default CA certificate the SSL Inspection will use when generating new server certificates."
         set range global
         set source factory
     next
     edit "Fortinet_CA_Untrusted"
-        set password ENC GL2XCoMLp7oHmK8JIXbij1XQ3qYrxU8/U/9sRDNbSLDNdAfrMCi17M13qD2iGnNzBxZ9L2WTNk7CogvFlO8ux3QKLIsgb3kWCTQW++WMsViV4ukWZVM41PIQhaYtI3/UxkyOXZyfVW/wTbJoWscdr+BdXSomjcEbihYK+DhIbgvIyQqVq91E3Lj/atQ4RDwtq7Mu4A==
+        set password ENC n96PgLLFP1O6hq43hbcS4lkY9O0rPOTu0VrNw1KO1m/+3+cMuPpk24k3inEUUfxM1CPjRa6qIPKrj/97BsiCs9s65w9QJ4aScVsuZy+giSAt4p493EXtYPfNKRVJHPncoeMAl7BcJMTITCpxz52PzwjwFSDYII1IvI6QlJlhUPDIgH8hzIZjZFM8p/H0VIYDDCOSdg==
         set comments "This is the default CA certificate the SSL Inspection will use when generating new server certificates."
         set range global
         set source factory
     next
     edit "Fortinet_SSL"
-        set password ENC lmDSzFSGuaH+O/8XgSejFYH8AdBa5HWZQsS/5Tvt2EU+NScsrTUWNh8rz7iiGz04SoppMHj4eeRe0O9GC5cDBp0ysToGF8GULhVPBa+P7p1JZFfYqanMM608fcG2RA6LIvTG8rde5w+98TWPg7vFQNla6inIAVVNVyUJLs2uAB9/q+QCR4yL+iJnSv2P32JG8F0lSA==
+        set password ENC VHsmRr1HTlWKLRW4rTfKgPOwsgj9LxV0jd5+TuovqRt5KX/R4Hph6oTU5aZfusCIaToL6W1Wbvj/ZhNUWL9CuMhf6baZKtWDRO6wsu9G1W/r7Kzvy3RkmoOn6bG6Z+FTDNCoVD45fIK0/CXWnkTWVUW0+GES8JXt80CpNLQ7PAFPwg8rFtP/K9QV6Q9xOO03AAViDA==
         set comments "This certificate is embedded in the hardware at the factory and is unique to this unit. "
         set range global
         set source factory
     next
     edit "Fortinet_SSL_RSA1024"
-        set password ENC emwanw7BcWVcD7QeYss6c7uVPk8UDQXyUFH7IRdTWrEFHcQ/9mMFtVtkCFUs7MId3JfTGhEGF45lunRitbObbZoEdUWAE7BF31v+hNklOa4LSlh+gtGsq9rOw+DjdHSy+T51ZUFzUwtzFakoRqy3JocTuXfwomob03BGU4bdDoPLpixosY2ZtavtAhsCSyeybSt1jQ==
+        set password ENC G/piifFA65ptE+/XCoUmsmbodtbJXYYvhQDMxxTFKO9Gi8tQWI7behSW5gDvoZ2TIFmjyQT9vM4rnDYoQafj9GKs9YM2o6AUni7fiY3gt65arnFbJ5SpYqMpnWfRfRlQ9kbgtStYn63kaC7PB4c79A0VB2TP9ZToiCyAomAt3J4ZYI148ZD5jCs9UpX5XIaeLPYgVg==
         set comments "This certificate is embedded in the hardware at the factory and is unique to this unit. "
         set range global
         set source factory
     next
     edit "Fortinet_SSL_RSA2048"
-        set password ENC NdMmpbfysWQgBN2ETH22E6lZoTp3n7LQNykeKYFKmwv1hgp0hRvkIiIt5xm7z40yM2FV1EHSXutXOg7MUVNnP5JmsJOScPHMY0ohwKTVJxdjzzWe23duL43sLWyP3E9FWqRASH2GcgOC/daZOQL5f6sDc2GZMjPmcXIhbmHoO7m41+Ga5czcFk1rVmGpnx7cHYnpAg==
+        set password ENC 7OJ9hly1eWsYjgiNJ06F+RviXlV1Bbsnp1bvwjW4U4YmYsV9zqA08rL31SOkmDaWt927yNPzZoIuEd6K82689LEqLlfBE+7i4fy0ci6jUV/Ztgrl7VxM747MAPCPXm2YUiv+N7r9U6DthKxwdrOehMBAz0CKvr/mrOoBxJ1Twro+oEsxCiz8hK+A5g1LcXdi9qBVUA==
         set comments "This certificate is embedded in the hardware at the factory and is unique to this unit. "
         set range global
         set source factory
     next
     edit "Fortinet_SSL_RSA4096"
-        set password ENC HRlBE2KrUK0tKkolzlTBlACLOnbs7JZ5Y5tQFnBTE60fiKEtIeiVWOI3L3iuXyNJyanmN16gjaAVfwXaEBaw797d6+1+ttNlOWI9UrFTM/HZ4iKH92msNIEISKnzIyT+DxAGy3hHcFrGBhq8hchIN4Sm7FIVgl/7FoJzH08KcDooPOGbQTZS21Nn7HU3DU7+Pgci8A==
+        set password ENC sG+Y/hw2zD4NB8Zmh4HCYLzzshO/x+76yEMqK9qxg4IR+B79mo7EOOBR79EAHMkXe8CFNMPSPuAwHFdMZdtqx0A3PKlR4dl/xTgKNMH8ysyy7ZRD+XSoiT/R65i7FXZRbOL1QwVmDV1tb5IC8t5a/l6G2HcG80X6ciqSLAlucNXfgP0hEKSP90QLpSDJuPg6I4+bHw==
         set comments "This certificate is embedded in the hardware at the factory and is unique to this unit. "
         set range global
         set source factory
     next
     edit "Fortinet_SSL_DSA1024"
-        set password ENC wkuOoMQu+YM8WDlggPlwIxtPTZk2XSyVm2ilTsXTH6yq9CNmX/JNxKKfKIXrGs8Y5jF5KpN5X6SWD4A5ESNTDN5T6Ax+kTQVZyjtLGVuzGIxG2+fDpFKyplHPuUzEEaJGAQLwVROlEYF/avEsvUC/twsM2d6GJDYbSvr04QgvsFMTTXVqqu1lOU+c4caxJww/AUMrA==
+        set password ENC So2YhgQb31D3rOr8B+ZiGPDb5ZjholoH1aJE4MNCFZG8nrivG8WPICjDRL9SQn7NC573rASi7l5P/YdnW4RFra8FYFeCLJQKdrHeu3gPAdIJjKWACQn73eeHFSWAOv1cpU8WazbemYQDbBx2IXouRegkJmuE9GmUrhrSBpHkzcR60zebJIUdUXWSOJrFk0OT4Qzu2Q==
         set comments "This certificate is embedded in the hardware at the factory and is unique to this unit. "
         set range global
         set source factory
     next
     edit "Fortinet_SSL_DSA2048"
-        set password ENC C+Jb0ooWxenAxpg2ki1gDBvFc5LzdMZJ0UgFt244/qYkE6AGmvs0VOgLu1OVpkYICXRQn6mv33+cQJAfbSi+KBCxIAEH4mTagAmH/Axtf5mcC/+8pMhOrlbic1hijXRZfIrXkmqs64JYKi+rgI7N0swozqKPJrmLbROn3xPCzy9IW1zj8jzjWf0xE8RmzWYJk9getA==
+        set password ENC bEiLeWdh4X3BZd3sg6RNougEfUBj9WUh+l2YKqgGUZy57f5+LnheATl+ohkE2MVtwMT/pMOnSgJXOsoNd4S49ywZghOd+1skH/DIn8EfRL2zRtAa5+rKIJ4nQ/mV/i6bd8E0SO4pFsML6H3OmVDg+oDUoZeiNo2FuRcSPdwFBHP5tIvRAjTBoVA49kH8Mx8XLk/fUw==
         set comments "This certificate is embedded in the hardware at the factory and is unique to this unit. "
         set range global
         set source factory
     next
     edit "Fortinet_SSL_ECDSA256"
-        set password ENC uFQ94xOR3pnLUfRZoeWKmV2Sx2XGT4qx2Sw9VxY0pN9Wym1MfxXp0JdbQWquiIzGjbBVr5ox2L8UOE5B+2AOtv5rMJVlh3nOiUWEsU5ZgUDTjur5EnftqMEd+g2v9wMImWLkYWWHYRwLE7/O+A/Whgcg5ns7zQYPs/OajSw8hvhbMfLvEwyhlFSLyTGGo2/QOXUGXw==
+        set password ENC zh8GrA60tgce22A0zP/FEf3Dzojsp/otVzKcGgsyY+Yci1wM8+PBoM3rx8oTyRf4kX0VAdkvu+zgu9m6CB5IFOs/3bN4BJhtmBhJbSUqLB3NeaoKJRssEAhows76OrDDc8dNVwBWj3jE81Mico2gDB29ZBZbIdwkvoMCTBKXaS43oB8Q1n9BYpCeodDqhUY/YV2zEg==
         set comments "This certificate is embedded in the hardware at the factory and is unique to this unit. "
         set range global
         set source factory
     next
     edit "Fortinet_SSL_ECDSA384"
-        set password ENC yB4idd1fKDfz+yNB0cdUS+JQWS2JWcFwqNvJY43Vfrm4jCfJnxhkdVC/sk5wIDRTSpYz6toZu6otqbZeXgyjPORy0Adt0tqbUUdJgLJDbZkOpu8jj1y+HkEH3qwPJ4lZTeOa1HLGKBgFkwuXaX5XyDQtpY7dB1z46TyLUWahgD4uf+EZcZOYFSx6otvMKuxbom1AVA==
+        set password ENC RgpfqfRUpLvXdhmNO2/h8vZNRgvQjav0un8UJvEOQIP8guPfIRu40loKV7ksvO1x38A2S9L95tH9JJEEtgWf5XqeicwoSRADiJxMZg2Ht9+WZ3KUH+/e7gh62I0iJO3fztBVofrf+X8JMTQsphNPC288RWqqJwR7j4+pP4WXsbINtQmq5t/h3gR2buf4BmkWDPHRgg==
         set comments "This certificate is embedded in the hardware at the factory and is unique to this unit. "
         set range global
         set source factory
     next
     edit "Fortinet_SSL_ECDSA521"
-        set password ENC GycO8DVuNQzoTa6rEv2/oEl3Elcm9lWpwBuN5du7tYa+f7a3vqup2HEBZbvd3Tx2TM5Jtvq54cuFw+2lVEIyls5/ad36P1SMPvxsUtYXgjo13eHv2GcRb2WFJYn7vXj53JJsBM2FPzXGiILW23b82PYZW2c1d52VRKUpSXgi6uWHHYxfSdzewwaozOj+l+IakQrkbw==
+        set password ENC 12ZVt/kfRIb7PdU/c19i740w0G1eKN7udt+UdPS7MJMubwkESXDoP644fORGAglM3AzDYwzNs9inMoHl8RDURMJWqBibtNfHLiHtEUhGLgw/D2pxe4aSuEXMJZld/OR/G2YjqlVW+CSOUK8OX4e0rQCVDZjuubKVOPdB6dN7bO0Mruw5/vjrkt260tKVP4QAEp9Vvw==
         set comments "This certificate is embedded in the hardware at the factory and is unique to this unit. "
         set range global
         set source factory
     next
     edit "Fortinet_SSL_ED25519"
-        set password ENC YbnQ6ti7ycZ1aI8wT3VcxN3wYfZ4e7XHaZ2L5QzRo2wvuridKGLTYod6bRqryYI3LvUM/4rxeV+XrRMzALl4YEOFyFS8A/XZQLv8taie7IUBpgTBZWIYwupyUh5iuDvEPVjnzmsKGhhXrj5Ka/rQwCLK35Jf0mzRiLZecdcn2R1mG0NagpLxVf6dFB1Z12uOLXdklw==
+        set password ENC OUNTOoAJxQ7WGTvyguUQhtV/LqHmxM4ezkFR6MzaNxJuTQXw/l/92qmMqrvRGEpVa222c/sfWfjKv2vekucq7FauLCy1RHPr6I+j+EQDWQ9jcUB3Tn5q33b3rw+mzyF/C4hoRFZv4ywggtIGuQP/6G8tDTeBMKbuFkpT8mE7Ud3n/78VishyKOhILJts4E4dyvJ7Lw==
         set comments "This certificate is embedded in the hardware at the factory and is unique to this unit. "
         set range global
         set source factory
     next
     edit "Fortinet_SSL_ED448"
-        set password ENC 2tD4Ah6q7d8peXa/k3dyAXzRf9mR45FtSSAPNPwWcDjrz0lY20v1f6yPR1+dH/j8Jxfmod/SK3o/MIsF/1OnCcZ6Bmm2EunEAD3E3JeChfxAeYlIzY+SiA+p+6xPUnc0m4oOR06wt1Q4RIgiytEE4GcFoceO+uF1otx13x4z5hUfrcbJg+EeutobXxpPXy/64Uupng==
+        set password ENC GjvkiIdT3clv/6yVVf5gsi7yvMPSvc0vKfQc8LqAmAMQI00SLiJ0t6HauwCruPYcsliX96H1jKTxqL6mJ00un8WVeNaymp9dvjNr4pOjw6iDZV07cb72TsHHZj/Zx3X9G5MoiCeql7ibMYTv3tn8Za40O2eKoG/1bN5NByRttO9u+SU0vECL8Jhuq5bslOh2p4zlBw==
         set comments "This certificate is embedded in the hardware at the factory and is unique to this unit. "
         set range global
         set source factory
@@ -1864,7 +1910,7 @@ end
 config user local
     edit "guest"
         set type password
-        set passwd ENC XUeDQG5TYxsyIlY/z4QPwFIpcsgkjFQ5FTKxZrwSVZnZBZepSyHN7C7GkyquBVmuTjawoiNI9k08jxwKsmJHWV9wPhUy1o4yeWxz85g1GSmk36h6VPa8jvmnF4fTeJIsFWRm84Vh1IvwMpVpfvOnI0Ja27dgaTEX3FgbM4R6507VVUgRAduzO16Yw8YKNsAqiGiRiw==
+        set passwd ENC RjgUkaKxRo82v7KfFc5+OZMhWyzvMDTeibB+QGdbPR2GXMngs3y7PCJyOwt8npM1MfUwQagQtSPQ+7mJ46AV358tm1+4mG+VHlBO4NJaz9sbc0WrU7cvCpSL5dh16TJ2dzADwExK+TFfsoAY8/PpSPlV9KjDmhlpVwbN5/DFIRLpUAdf2VmdYomMLoQenlmMDuT/IA==
     next
 end
 config user setting
@@ -2143,7 +2189,7 @@ config vpn ipsec phase1-interface
         set net-device disable
         set proposal aes128-sha256 aes256-sha256 aes128-sha1 aes256-sha1
         set remote-gw 192.168.1.10
-        set psksecret ENC xl17nWv4PJy9HLeI3018fThbHVNVnFdriPEPDOR6U0dSWPyJC3QrF44hk0o74oLa5EA8+bxUvb+QbWG2KgcQfVGOaJ2V/2eEY3g2CDzBCp4WpvuRKYUo/Sqo4xRV+IHm7uuF0uiNIsNJwe7BShJls5I+BeriI/0df98fZ47i5A+lk88FDE/txabBLC5Cfnt1FFw13g==
+        set psksecret ENC 5DGitJvYPiAZ911KUqAT39cDs3SYuTnSV5X2FVTf7+4KbnqBQNTTKX0QoHx/n4vM5Ai+VZehTpHq/CZ1F2e6lfQGNy1UY4GmaA6cAPkYh1RtRLypoZEirMJq7SLNOcne8p4mty1s6lDOKMg94OwexQzaYBB+/n/Ak3qN9zYtW6SdGh2KNT8MyA37DkRStkQOAWAKLA==
     next
 end
 config vpn ipsec phase2-interface
@@ -3585,40 +3631,50 @@ config waf profile
         config signature
             config main-class 100000000
                 set action block
+                set log disable
                 set severity high
             end
             config main-class 20000000
+                set log disable
             end
             config main-class 30000000
                 set status enable
                 set action block
+                set log disable
                 set severity high
             end
             config main-class 40000000
+                set log disable
             end
             config main-class 50000000
                 set status enable
                 set action block
+                set log disable
                 set severity high
             end
             config main-class 60000000
+                set log disable
             end
             config main-class 70000000
                 set status enable
                 set action block
+                set log disable
                 set severity high
             end
             config main-class 80000000
                 set status enable
+                set log disable
                 set severity low
             end
             config main-class 110000000
                 set status enable
+                set log disable
                 set severity high
             end
             config main-class 90000000
                 set status enable
                 set action block
+                set log disable
                 set severity high
             end
             set disabled-signature 80080005 80200001 60030001 60120001 80080003 90410001 90410002
@@ -3688,7 +3744,7 @@ config waf profile
 end
 config firewall policy
     edit 1
-        set name "Any LAN"
+        set name "LAN_to_Internet"
         set uuid 5d0f992e-47b4-51f1-20e1-29d280b18ade
         set srcintf "VLANS"
         set dstintf "wan"
@@ -3701,7 +3757,7 @@ config firewall policy
         set nat enable
     next
     edit 2
-        set name "Any WAN"
+        set name "Internet_to_LAN"
         set uuid e645acd2-47b5-51f1-b3b9-d71d66543834
         set srcintf "wan"
         set dstintf "VLANS"
@@ -3713,21 +3769,9 @@ config firewall policy
         set logtraffic all
         set nat enable
     next
-    edit 3
-        set name "Intervlan"
-        set uuid 8fe5cb9e-487b-51f1-d4c3-5fdc3e292478
-        set srcintf "VLANS"
-        set dstintf "VLANS"
-        set srcaddr "all"
-        set dstaddr "all"
-        set action accept
-        set schedule "always"
-        set service "ALL"
-        set logtraffic all
-    next
-    edit 4
-        set name "site to site IN"
-        set uuid 3535db10-49ef-51f1-d830-6c530e290d68
+    edit 8
+        set name "Allow_Site to site IN"
+        set uuid 46d4fb5c-4f72-51f1-9200-2dd1fc42027c
         set srcintf "Main site tunel"
         set dstintf "VLANS"
         set srcaddr "all"
@@ -3737,74 +3781,127 @@ config firewall policy
         set service "ALL"
         set logtraffic all
     next
-    edit 5
-        set name "site to site OUT"
-        set uuid 493b20de-49ef-51f1-e175-c2af65b545de
+    edit 9
+        set name "INFRA_Branch_to_Main"
+        set uuid 00e81d76-4f73-51f1-86a6-238140cfd9c0
         set srcintf "VLANS"
         set dstintf "Main site tunel"
-        set srcaddr "all"
+        set srcaddr "NET_BRANCH_VLAN20_PERSONALE" "NET_Branch_VLAN90_Mgmt" "GRP_Branch_Elev_Nets"
+        set dstaddr "HOST_Main_DC1" "HOST_Main_DC2" "HOST_Main_Docker_NTP"
+        set action accept
+        set schedule "always"
+        set service "DNS" "NTP" "PING" "HTTPS" "SSH"
+        set logtraffic all
+    next
+    edit 10
+        set name "MONITOR_PRTG_to_Branch"
+        set uuid 503b0956-4f73-51f1-8eb1-d33200b6973e
+        set srcintf "Main site tunel"
+        set dstintf "VLANS"
+        set srcaddr "HOST_Main_PRTG"
+        set dstaddr "NET_Branch_VLAN90_Mgmt"
+        set action accept
+        set schedule "always"
+        set service "PING" "SNMP"
+        set logtraffic all
+    next
+    edit 11
+        set name "PROD_Personale_to_Main"
+        set uuid 0379e8e8-4f74-51f1-927a-7541be0e9a47
+        set srcintf "VLANS"
+        set dstintf "Main site tunel"
+        set srcaddr "NET_BRANCH_VLAN20_PERSONALE"
+        set dstaddr "HOST_Main_DC1" "HOST_Main_DC2" "NET_Main_VLAN30_Servers"
+        set action accept
+        set schedule "always"
+        set service "DNS" "KERBEROS" "LDAP" "SMB"
+        set logtraffic all
+    next
+    edit 12
+        set name "INET_Servers_Outbound"
+        set uuid 245b5ed8-4f75-51f1-05a6-676661f9f3f3
+        set srcintf "LAG_LAN"
+        set dstintf "wan"
+        set srcaddr "NET_Main_VLAN30_Servers" "NET_Main_VLAN40_Services"
         set dstaddr "all"
+        set action accept
+        set schedule "always"
+        set service "DNS" "HTTP" "HTTPS" "NTP" "PING"
+        set logtraffic all
+        set nat enable
+    next
+    edit 13
+        set name "IN_INFRA_from_Branch"
+        set uuid 6b2f9022-4f75-51f1-2bb4-bc8fe100b109
+        set srcintf "VLANS"
+        set dstintf "wan"
+        set srcaddr "NET_BRANCH_VLAN20_PERSONALE"
+        set dstaddr "all"
+        set action accept
+        set schedule "always"
+        set service "DNS" "NTP"
+        set logtraffic all
+        set nat enable
+    next
+    edit 14
+        set name "IN_PROD_Personale_from_Branch"
+        set uuid ddf17bca-4f75-51f1-0211-ff3d26a5c67e
+        set srcintf "VLANS"
+        set dstintf "Main site tunel"
+        set srcaddr "GRP_Branch_Elev_Nets"
+        set dstaddr "HOST_Main_DC1" "HOST_Main_DC2"
+        set action accept
+        set schedule "always"
+        set service "DNS" "KERBEROS" "LDAP" "SMB"
+        set logtraffic all
+    next
+    edit 15
+        set name "OUT_MGMT_to_Branch"
+        set uuid 1a936fca-4f76-51f1-1ca8-45b9410fa450
+        set srcintf "VLANS"
+        set dstintf "wan"
+        set srcaddr "GRP_Branch_Elev_Nets"
+        set dstaddr "NET_Branch_VLAN90_Mgmt"
         set action accept
         set schedule "always"
         set service "ALL"
         set logtraffic all
-    next
-    edit 6
-        set name "Allow Wiki OUT"
-        set uuid 8e76d79c-4a08-51f1-f1eb-ff0def5aedf6
-        set srcintf "VLANS"
-        set dstintf "Main site tunel"
-        set srcaddr "all"
-        set dstaddr "DMZ"
-        set action accept
-        set schedule "always"
-        set service "ALL"
-    next
-    edit 7
-        set name "Allow wiki IN"
-        set uuid aa6bcab6-4a08-51f1-c41d-eea33cf9f424
-        set srcintf "Main site tunel"
-        set dstintf "VLANS"
-        set srcaddr "DMZ"
-        set dstaddr "all"
-        set action accept
-        set schedule "always"
-        set service "ALL"
+        set nat enable
     next
 end
 config firewall ssh local-key
     edit "Fortinet_SSH_RSA2048"
-        set password ENC k2UE4CaSeEFR7CKSVSf/hk4j8LntYE4lOWlln0SlhSCl4KUZIh4gH79DH22MjuKvhqeHS+/xHpQUNbOJnivzTVXIRoipj+g3rfK7MB5BwlA3PqzYuUIVBItQdV7DCBBqQwxTHCRbFwfydfNsXJPjHyTf1ihJQ3xiOc0oA40PTQVSMaih5YZvEfQcSQDJ+E7l2DRKUA==
+        set password ENC L2QE4FEUK+X5l4blTLMcUNdofVGKBBDV2+XRAopisSxReI7TiJDt9HnmiMUyl8ezBnudiiLUxvb+V4h6MBHjkT2ItNLrgKDy+9ugbq/SHFgm2hem5KwKicKyR8XEGM3uQM0ATXhPupFT75DpwjNLPPXI4woFcKNvkIzTkl+2SO99DrCkEsE5CrOsDWpeRsY/vgGZrw==
         set source built-in
     next
     edit "Fortinet_SSH_DSA1024"
-        set password ENC k2UE4BINCOGGYUledoyUOlMCtn2tLkq5qXBzqAGDUkAtE6XFTzxu3djrWEgstfrW+09QS0gugycTl9roODbXALa0XzGtY9Z7praF/c6BZ/PuCWTTzdrxknYyT6JBgAEbYBgGq7N3r/dE4HQgSU/Zvlc+00FD6noMKH7HN3nFJVj1SZWC6lvKMBxEippRNrky4VcUdg==
+        set password ENC L2QE4MzGyZcTakyfM88Jiu2ZxtZlRzhVxyCNF1JQ/ca/btT0QCU2MlzX2pp6hIoFepaTPeLYQ8RiRFLodTz4S0Qp8MGiW0OGyKq37B5UmN8SJh2HkKmMGHZmcx5s388jjUOMlSjs9OtatDfOIG/YyYvKEBg7QwDjIZdJMBC31M4Ca7fxXiF5G4n24NtF3kHeRlJEtw==
         set source built-in
     next
     edit "Fortinet_SSH_ECDSA256"
-        set password ENC k2UE4Kcgzm39GvSYB3oG3tR2yaSCvxJR0BVp4N4Yc3LfosEJOdyJhHdkjrPOL8qJPHTR6hWYGVKHZRUd7hzkImjP2464NjOdjYcfVHCvHUUcA4AmtXx3u1DIMVx0VoGWyKxWAIlZjDnsP6K1VJlq/diGL06zIm9XLCeOTW6nnoKZwEnuzB+BGIUfCoP4mO1h+/Mxvw==
+        set password ENC L2QE4DGORuNI1bqyfRzaNSSNwjfvdp7fdw2oQ+tf4qDsf+740TxxxhOgh1nazwix9klURU1R8dG/EtbGTvRouIU8uMGY7lyuBrVP1Ecam+K9TjFlTkhlUFtmXX66HJ6+CJhsNHV15zW9/bR0v/boFtAFY5ba3yvqLkGJSrIiJZ/GECtIA+xtHLoX5jBEHb3szJ1Pxg==
         set source built-in
     next
     edit "Fortinet_SSH_ECDSA384"
-        set password ENC k2UE4OEzDtqnt+XmBnNqY8yOWflrvYVidYbTrBcsFAdXA+XvqSkC9WDkP7Pzu8MVn3qMiopwGxoROucaPnBLQVJq/7g/SuD3AM3QHlBCwjLBoo3rM3n512Ar4xKkmykBlENnvlyv++gV7UusU9A9mkkck4tWwHUHegol4KHtFkG65u0A2lXUIE11oriSgzf3oxZBrw==
+        set password ENC L2QE4MRR2dCllziCSe5ZI125s+DJZwsrK48Ku8ylwT54esXCnmeRDF8HUmjAy8rtcfXFQwbdudBtooPMz3GBD2A/vRwY0fxi4WsNmqEZNatcqzIXerl43N6FhRfTZ+iyjgcV6wWTgCgJ6MOAK9Ie5xbpqUWJrXt62i1CdlvOc3hP3XdaP987rEI6lcGoN4wkMCHKlw==
         set source built-in
     next
     edit "Fortinet_SSH_ECDSA521"
-        set password ENC k2UE4ExbNYOhksiE4AO2Oz38d0DpAuWUi2EB9P7wd+nWkUKFNGOgBR2l/TaA7Ly/hIJmTp/A9WAnnfvPJK2VMImkGa88bI5QbP4jyNAWE572LPYhJIzaileKCg/PvC1kSIitX6VmAGzUgx30oPNO/NlUW9x8aSEyg9iC3dMrPQOpTnhQlg7kR892F/owHQUJnp/V6w==
+        set password ENC L2QE4HwBAs/PvXhM+mE0QHnllD51+pCkoggxm1pZOdUQoTBgaNeBtZVgGhGTrAU38ThKtBM514wdZYpRUXKNPNmkPjx43gfY8nQ+jkRGCmHT4w6H05waNThvFUEEbK85SID5pTnLyj5awZFsIbEzrmpgae46PyPfFMXW22eXQi/uM8ExMiaQbFqU2S8xvRZq1Ktuqw==
         set source built-in
     next
     edit "Fortinet_SSH_ED25519"
-        set password ENC fGrIATz1i/xriazo46AHPnOAlj7GayLObM9EZC7ol4iCf+1ls2nhN5Kq8n56oA/zSgiuN+iZGkfpdCRn8Y6EsTZHeCiDWxI4Kif36gy3nm4X7ZBKlqQuZtpMqiZ5tAzqTzoNj+9TTtL6GAmc1Pk++XxlIu/OBC718O5LwWwLJ1++R8dfmvRtv0R+xnh8X18h8hN0PA==
+        set password ENC oyOgAdQQkXvzBArHXh12qYsWuwI69xz1fweYpLTVnatNhEZnEkPNi4MQGGueKC0jjh75dIEwe0jzmar+A4qfQGj75cMSE+Ph52x5pdZk6Ibkn8SrH7QpPK5CAVf87RiqsmS/q68GI5vTAJJT/rHuJK4BFLwNvSPkHoMk/OQq5eaef56xBu3iq5xo5CE81lxnmuu34Q==
         set source built-in
     next
 end
 config firewall ssh local-ca
     edit "Fortinet_SSH_CA"
-        set password ENC oMcAASWg+SvQq4KONdOpoAs080QNed3+J7HfySvyJyVNhKpasiuXs6VNH0nB57/3oont8qmQ+C/96LLqspt84DArUxZltQ3E7oFOtpHoH7K+aT36Jna9F/BaT28qX1/3SUIrfv/agK6KUMI1PYZfJwQbrKp4JmQBDKSaW2A/zOZR9WnuZ+Z44fl4X0IjaudLDyDMTQ==
+        set password ENC oMcAASWg+SvQq4KONdOpoAs080QNed3+J7HfySvyJyVNhKpasiuXs6VNH0nB57/3oont8qmQ+C/96LLqspt84DArUxb+cQ4+nGhQXc9IDe2r7/6RDlWce+jh24lGet5jDPOIgOPmaDWpw802rl8Azj+vKRZ+JPO9vDqTKsQvCEXOPdmoE7jiiA9rTEBTf5HnbMt6Cw==
         set source built-in
     next
     edit "Fortinet_SSH_CA_Untrusted"
-        set password ENC oMcAASHDbJA5enlkqllfjjAyZGqQDcd8TPLQ8alvePMKuwkmNfV887fGpAOtdFPCW2jw6lJKKc/mC4cUHh3u0to/MsiatMTBWvD6ySJMFOnhTsvG514pnqm/bmQFc9KmIRXEwE/H9SPCag6GaM+qecXK0VuqOrLVZX/vXRYdQD8PM/wekfu4JnmbrweakcPL5m4d3w==
+        set password ENC oMcAASHDbJA5enlkqllfjjAyZGqQDcd8TPLQ8alvePMKuwkmNfV887fGpAOtdFPCW2jw6lJKKc/mC4cUHh3u0to/MsiigCDQ7rTORzCGTxfsJZQQYcukkNVlLSVxAQP20j9++qM4OFdoJV9jnPlhB5HBl98G2CVU8JIxv/gIz8I+OPnHlbo8L/X4Hvc1Ok4TxJqW/g==
         set source built-in
     next
 end
@@ -4759,7 +4856,7 @@ config router ospf
     end
     config ospf-interface
         edit "Trunk"
-            set interface "lan1"
+            set interface "LAG_LAN"
         next
         edit "main_site_tunel"
             set interface "Main site tunel"
@@ -4792,7 +4889,7 @@ config router ospf
             set prefix 10.1.0.0 255.255.0.0
         next
     end
-    set passive-interface "lan1"
+    set passive-interface "LAG_LAN"
     config redistribute "connected"
     end
     config redistribute "static"
