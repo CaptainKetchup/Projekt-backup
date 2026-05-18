@@ -29,8 +29,8 @@
 ! 
 ! 
 !
-! Last configuration change at 09:28:22 CEST Mon May 18 2026 by admin
-! NVRAM config last updated at 09:28:24 CEST Mon May 18 2026 by admin
+! Last configuration change at 13:19:24 CEST Mon May 18 2026 by admin
+! NVRAM config last updated at 13:19:25 CEST Mon May 18 2026 by admin
 !
 version 12.2
 no service pad
@@ -106,10 +106,6 @@ vlan internal allocation policy ascending
 ip ssh version 2
 !
 !
-!
-interface Loopback99
- description OXIDIZED TEST!
- no ip address
 !
 interface Port-channel1
  switchport trunk encapsulation dot1q
